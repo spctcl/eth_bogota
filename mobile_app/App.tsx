@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { Web3Auth } from "@web3auth-mpc/web3auth";
@@ -6,7 +7,11 @@ import { SafeEventEmitterProvider } from "@web3auth-mpc/base";
 import { tssDataCallback, tssGetPublic, tssSign, generatePrecompute } from "torus-mpc";
 import { WebView } from 'react-native-webview';
 
+const clientId = "BPQhc6_F24Icw9bK93Bc8__WMPMd9qQgdzVXb5l1Q8xfpibzsai0LAN39HUuzCrTby0EIXchi57mrZqUAIS8aik"
+
 export default function App() {
+  const [provider, setProvider] = useState();
+
   useEffect(() => {
     const init = async () => {
       try {
@@ -66,7 +71,7 @@ export default function App() {
             },
           },
         });
-        setWeb3auth(web3auth);
+        //setWeb3auth(web3auth);
   
         if (web3auth.provider) {
           setProvider(web3auth.connect()); // EY: Calling connect opens the modal.
