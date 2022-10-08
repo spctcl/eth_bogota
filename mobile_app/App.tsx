@@ -7,18 +7,14 @@ const clientId = "BPQhc6_F24Icw9bK93Bc8__WMPMd9qQgdzVXb5l1Q8xfpibzsai0LAN39HUuzC
 
 export default function App() {
 
-const appUrl = 'https://localhost:3000';
+// const appUrl = 'http://10.60.1.111:3000';
 
 return (
       <View style={styles.container}>
       <WebView
-    
-          scalesPageToFit={true} 
+          scalesPageToFit={false}
           javaScriptEnabled
-          source={{
-            html: appUrl
-          }}
-          automaticallyAdjustContentInsets={false}
+          source={{ uri: 'https://expo.dev' }} 
         />
       <StatusBar style="auto" />
     </View>
