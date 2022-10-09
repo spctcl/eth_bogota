@@ -12,7 +12,7 @@ export default function App() {
 return (
       <View style={styles.container}>
       <WebView
-          scalesPageToFit={false}
+          scalesPageToFit={true}
           javaScriptEnabled
           source={{ uri: 'https://expo.dev' }} 
         />
