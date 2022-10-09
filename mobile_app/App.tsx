@@ -1,31 +1,59 @@
-import React, {useEffect, useState} from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { WebView } from 'react-native-webview';
+import { SafeEventEmitterProvider } from "@web3auth-mpc/base";
+import { Web3AuthCore } from "@web3auth-mpc/core";
+import { useEffect, useState } from "react";
+import { View } from 'react-native';
 
-const clientId = "BPQhc6_F24Icw9bK93Bc8__WMPMd9qQgdzVXb5l1Q8xfpibzsai0LAN39HUuzCrTby0EIXchi57mrZqUAIS8aik"
+const clientId = "BIUeA2m8P1d1N2wrOLi4VOFVtqawWzlxM5SB9jI6sKNYs3To0RnvroWyu9PImiDrYO5m2Z8IaDqokzEV7tdi8_c"
 
-export default function App() {
+function App() {
+    const [web3auth, setWeb3auth] = useState<Web3AuthCore | null>(null);
+    const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null);
 
-// const appUrl = 'http://10.60.1.111:3000';
+    useEffect(() => {
+        const init = async () => {
+            try {
+                await web3auth.init();
 
-return (
-      <View style={styles.container}>
-      <WebView
-          scalesPageToFit={true}
-          javaScriptEnabled
-          source={{ uri: 'https://expo.dev' }} 
-        />
-      <StatusBar style="auto" />
-    </View>
-  );
+                setWeb3auth(web3auth);
+
+                if (web3auth.provider) {
+                    setProvider(web3auth.provider);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        init();
+    }, []);
+
+    function uiConsole(...args: any[]): void {
+        const el = document.querySelector("#console>p");
+        if (el) {
+            el.innerHTML = JSON.stringify(args || {}, null, 2);
+        }
+    }
+
+    const login = async () => {
+        if (!web3auth) {
+            uiConsole("web3auth not initialized yet.");
+            return;
+        }
+        const web3authProvider = await web3auth.connect();
+        setProvider(web3authProvider);
+    }; 
+
+    const unloggedInView = (
+        <button disabled={!web3auth} onClick={login} className="card">
+            {web3auth ? "Login" : "Loading..."}
+        </button>
+    );
+
+    return (
+        <View>
+            {unloggedInView}
+        </View>
+    );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
